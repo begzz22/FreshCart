@@ -18,8 +18,10 @@ export const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" },
       },
       authorize: async function (credentials) {
-        // login function
-        const response = await fetch(`${process.env.API}auth/signin`, {
+        const baseUrl = process.env.base_url;
+        if (!baseUrl) throw new Error("base_url env variable is missing");
+
+        const response = await fetch(`${baseUrl}auth/signin`, {
           method: "POST",
           body: JSON.stringify(credentials),
           headers: { "Content-Type": "application/json" },
@@ -48,8 +50,8 @@ export const authOptions: AuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      if(token){
-        session.user = token.user
+      if (token) {
+        session.user = token.user;
       }
       return session;
     },
