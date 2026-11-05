@@ -1,0 +1,21 @@
+"use server";
+
+import { getMyToken } from "@/utilities/token";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+
+export async function getAllOrdersAction() {
+  const token = await getMyToken();
+
+  if (!token) {
+    throw new Error("Login First");
+  }
+
+  const { id } = jwtDecode(token);
+
+  const { data } = await axios.get(
+    `https://ecommerce.routemisr.com/api/v1/orders/user/${id}`,
+  );
+
+  return data;
+}
