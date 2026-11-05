@@ -5,13 +5,14 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 export async function getAllOrdersAction() {
-  const token = await getMyToken();
+  const token= await getMyToken();
 
   if (!token) {
     throw new Error("Login First");
   }
 
-  const { id } = jwtDecode(token);
+  
+  const { id }:{id:string} = jwtDecode(token);
 
   const { data } = await axios.get(
     `https://ecommerce.routemisr.com/api/v1/orders/user/${id}`,

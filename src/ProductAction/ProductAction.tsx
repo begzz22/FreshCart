@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { cartContext } from "@/Context/CartContext";
-import { useWishlist } from "@/Context/WishlistContext"; // عدّل المسار حسب مكان الملف عندك
+import { useWishlist } from "@/Context/WishlistContext";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import {
   FaBolt,
@@ -21,6 +21,8 @@ type Props = {
   max: number;
   price: number;
 };
+
+type CartResponse = { status?: string; message?: string };
 
 export default function ProductActions({ id, max, price }: Props) {
   const router = useRouter();
@@ -41,10 +43,10 @@ export default function ProductActions({ id, max, price }: Props) {
 
   async function addToCart(): Promise<boolean> {
     try {
-      let lastResponse;
+      let lastResponse: CartResponse | undefined;
 
       for (let i = 0; i < count; i++) {
-        lastResponse = await addProductCart(id);
+        lastResponse = (await addProductCart(id)) as unknown as CartResponse;
 
         if (lastResponse?.status !== "success") {
           toast.error("Product hasn't been added to cart", {
@@ -75,7 +77,7 @@ export default function ProductActions({ id, max, price }: Props) {
     const ok = await addToCart();
     setLoadingBuy(false);
 
-    if (ok) router.push("/cart"); // غيّر المسار لو الـ checkout عندك مختلف
+    if (ok) router.push("/cart");
   }
 
   async function handleWishlist() {

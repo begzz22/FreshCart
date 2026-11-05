@@ -30,9 +30,10 @@ import {
   FaTruck,
   FaBox,
 } from "react-icons/fa6";
+import { CartProduct } from "@/types/cart.t";
 
 const Payment = () => {
-  const details = useRef<HTMLInputElement>(null);
+  const details = useRef<HTMLTextAreaElement>(null);
   const phone = useRef<HTMLInputElement>(null);
   const city = useRef<HTMLInputElement>(null);
 
@@ -462,7 +463,7 @@ const Payment = () => {
                     {/* Products */}
                     <div className="space-y-3 max-h-56 overflow-y-auto mb-5 pr-1">
                       {products?.length > 0 ? (
-                        products.map((item) => (
+                        products.map((item:CartProduct) => (
                           <div
                             key={item.product._id}
                             className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors"

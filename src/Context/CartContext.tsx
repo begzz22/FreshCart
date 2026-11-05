@@ -3,13 +3,34 @@ import { clearCartAction } from "@/CartAction/ClearUserCart";
 import { getUserCartAction } from "@/CartAction/GetUserCart";
 import { deleteCartItemAction } from "@/CartAction/RemoveCartItem";
 import { updateCartCountAction } from "@/CartAction/UpdateCartCount";
-import { Cart } from "@/types/cart.t";
+import { Cart, CartProduct } from "@/types/cart.t";
 import { createContext, useEffect, useState } from "react";
 
-export const cartContext = createContext({});
+type ApiResponse = {
+  status?: string;
+  message?: string;
+  [key: string]: unknown;
+};
+
+type CartContextType = {
+  products: CartProduct[];
+  totalCartPrice: number;
+  totalCartItems: number;
+  isLoading: boolean;
+  cartId: string;
+  afterPayment: () => void;
+  addProductCart: (id: string) => Promise<ApiResponse>;
+  deleteCartItem: (id: string) => Promise<ApiResponse>;
+  updateCartCount: (id: string, count: number) => Promise<ApiResponse>;
+  clearUserCart: () => Promise<ApiResponse>;
+};
+
+export const cartContext = createContext<CartContextType>(
+  {} as CartContextType,
+);
 
 const CartContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<CartProduct[]>([]);
   const [totalCartPrice, setTotalCartPrice] = useState(0);
   const [totalCartItems, setTotalCartItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
